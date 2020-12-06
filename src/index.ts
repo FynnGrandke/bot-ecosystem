@@ -1,8 +1,16 @@
-import { Application } from 'probot' // eslint-disable-line no-unused-vars
+import { Application } from 'probot'
 
-export = (app: Application) => {
+export = ({ app }: { app: Application }) => {
   app.on('issues.opened', async (context) => {
-    const issueComment = context.issue({ body: 'Thank you Humand for opening this issue.' })
+    const issueComment = context.issue({
+      body: 'Thank you fellow Human for opening this issue.',
+    })
+    await context.github.issues.createComment(issueComment)
+  })
+  app.on('issue_comment.created', async (context) => {
+    const issueComment = context.issue({
+      body: 'Thank you fellow Human. Your comment what successfully processed.',
+    })
     await context.github.issues.createComment(issueComment)
   })
   // For more information on building apps:
