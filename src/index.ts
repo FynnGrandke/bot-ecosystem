@@ -8,7 +8,8 @@ export = ({ app }: { app: Application }) => {
     await context.github.issues.createComment(issueComment)
   })
   app.on('issue_comment.created', async (context) => {
-    if (context.payload.issue.body !== 'Hey Robot') {
+    console.log('issue_comment created', context.payload)
+    if (context.payload.comment.body !== 'Hey Robot') {
       return
     } else {
       const issueComment = context.issue({
@@ -16,6 +17,12 @@ export = ({ app }: { app: Application }) => {
       })
       await context.github.issues.createComment(issueComment)
     }
+  })
+  app.on('pull_request.opened', async (context) => {
+    const pRComment = context.issue({
+      body: 'Thank you fellow Human for opening this pull request.',
+    })
+    await context.github.issues.createComment(pRComment)
   })
   // For more information on building apps:
   // https://probot.github.io/docs/
