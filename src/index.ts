@@ -8,10 +8,14 @@ export = ({ app }: { app: Application }) => {
     await context.github.issues.createComment(issueComment)
   })
   app.on('issue_comment.created', async (context) => {
-    const issueComment = context.issue({
-      body: 'Thank you fellow Human. Your comment what successfully processed.',
-    })
-    await context.github.issues.createComment(issueComment)
+    if (context.payload.issue.body !== 'Hey Robot') {
+      return
+    } else {
+      const issueComment = context.issue({
+        body: 'Thank you fellow Human. Your comment was successfully processed.',
+      })
+      await context.github.issues.createComment(issueComment)
+    }
   })
   // For more information on building apps:
   // https://probot.github.io/docs/
